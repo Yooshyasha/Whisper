@@ -1,14 +1,14 @@
-package com.yooshyasha.whisper.data.api
+package com.yooshyasha.whisper.data.api.backend
 
 import com.yooshyasha.whisper.data.model.ChatDTO
 import com.yooshyasha.whisper.data.model.UserDTO
 import java.util.UUID
 
-const val BACKEND_URL = "http://whisper.sytes.net"
+const val BACKEND_URL = "http://whisper.sytes.net:8080"
 
 class WhisperBackendImpl(
     private val token: String?
-) : WhisperBackend{
+) : WhisperBackend {
 
     override fun registration(nickname: String): String? {
         val endpoint = "/auth/register"

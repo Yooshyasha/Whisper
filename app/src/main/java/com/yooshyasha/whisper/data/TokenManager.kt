@@ -1,4 +1,4 @@
-package com.yooshyasha.whisper.data.api
+package com.yooshyasha.whisper.data
 
 import android.content.Context
 import android.content.SharedPreferences

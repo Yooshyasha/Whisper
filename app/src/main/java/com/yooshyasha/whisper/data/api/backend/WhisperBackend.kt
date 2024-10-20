@@ -1,4 +1,4 @@
-package com.yooshyasha.whisper.data.api
+package com.yooshyasha.whisper.data.api.backend
 
 import com.yooshyasha.whisper.data.model.ChatDTO
 import com.yooshyasha.whisper.data.model.UserDTO

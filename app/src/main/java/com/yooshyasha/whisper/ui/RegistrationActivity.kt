@@ -1,18 +1,16 @@
 package com.yooshyasha.whisper.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.yooshyasha.whisper.R
-import com.yooshyasha.whisper.data.api.TokenManager
-import com.yooshyasha.whisper.data.api.WhisperBackendImpl
+import com.yooshyasha.whisper.data.TokenManager
+import com.yooshyasha.whisper.data.api.backend.WhisperBackendImpl
 import com.yooshyasha.whisper.presentation.RegistrationViewModel
-import com.yooshyasha.whisper.presentation.RegistrationViewModelFactory
 
-class RegistrationActivity : AppCompatActivity() {
+class RegistrationActivity : Activity() {
 
     private lateinit var viewModel: RegistrationViewModel
     private lateinit var inputNickname: EditText
@@ -22,10 +20,10 @@ class RegistrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_activity)
 
-        viewModel = ViewModelProvider(this,
-                RegistrationViewModelFactory(TokenManager(this),
-                WhisperBackendImpl(null)))
-                .get(RegistrationViewModel::class.java)
+        val tokenManager = TokenManager(this)
+        val whisperBackend = WhisperBackendImpl(null)
+
+        viewModel = RegistrationViewModel(tokenManager, whisperBackend)
 
         inputNickname = findViewById(R.id.input_nickname)
         registerButton = findViewById(R.id.button_registration)
@@ -34,17 +32,15 @@ class RegistrationActivity : AppCompatActivity() {
             val nickname = inputNickname.text.toString()
 
             if (nickname.isNotEmpty()) {
-                viewModel.registerUser(nickname)
+                val token = viewModel.registerUser(nickname)
 
-                val token = viewModel.getToken()
                 if (token != null) {
-                    // Дальнейшие действия с токеном
+                    Toast.makeText(this, "Registration success", Toast.LENGTH_SHORT).show()
+                    finish()
                 } else {
-                    // Обработка случая, когда токен не получен
                     Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                // Обработка случая, когда никнейм пустой
                 Toast.makeText(this, "Please enter a nickname", Toast.LENGTH_SHORT).show()
             }
         }
