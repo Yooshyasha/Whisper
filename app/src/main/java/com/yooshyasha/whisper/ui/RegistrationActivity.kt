@@ -45,4 +45,8 @@ class RegistrationActivity : Activity() {
             }
         }
     }
+
+    override fun finish() {
+        return
+    }
 }

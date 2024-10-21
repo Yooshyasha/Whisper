@@ -6,12 +6,12 @@ import com.yooshyasha.whisper.data.api.backend.WhisperBackend
 
 class AuthViewModel(
     private val tokenManager: TokenManager,
-    private val whisperBackend: WhisperBackend,
+    private val whisperBackend: WhisperBackend?,
 ) : ViewModel() {
 
     fun registerUser(nickname: String) : String? {
         // Регистрация пользователя и сохранение токена
-        val token = whisperBackend.registration(nickname)
+        val token = whisperBackend?.registration(nickname)
 
         if (token != null) tokenManager.saveToken(token)
         else return null

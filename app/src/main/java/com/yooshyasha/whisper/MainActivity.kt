@@ -10,14 +10,15 @@ import com.yooshyasha.whisper.presentation.AuthViewModel
 import com.yooshyasha.whisper.ui.ChatsActivity
 import com.yooshyasha.whisper.ui.RegistrationActivity
 
-class MainActivity(
-    private var registrationViewModel: AuthViewModel,
-    private var whisperBackend: WhisperBackend,
-) : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var registrationViewModel: AuthViewModel
+    private lateinit var whisperBackend: WhisperBackend
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        registrationViewModel = AuthViewModel(TokenManager(this), null)
 
         val token = registrationViewModel.getToken()
         whisperBackend = WhisperBackendImpl(token)

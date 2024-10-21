@@ -15,11 +15,11 @@ import com.yooshyasha.whisper.data.model.ChatDTO
 import com.yooshyasha.whisper.presentation.UserViewModel
 import java.util.zip.Inflater
 
-class ChatsActivity(
-    private var tokenManager: TokenManager,
-    private var userViewModel: UserViewModel,
-    private var whisperBackend: WhisperBackend,
-) : Activity() {
+class ChatsActivity : Activity() {
+
+    private lateinit var tokenManager: TokenManager
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var whisperBackend: WhisperBackend
 
     lateinit var vList: LinearLayout
 
