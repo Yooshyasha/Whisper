@@ -8,11 +8,11 @@ import android.widget.Toast
 import com.yooshyasha.whisper.R
 import com.yooshyasha.whisper.data.TokenManager
 import com.yooshyasha.whisper.data.api.backend.WhisperBackendImpl
-import com.yooshyasha.whisper.presentation.RegistrationViewModel
+import com.yooshyasha.whisper.presentation.AuthViewModel
 
 class RegistrationActivity : Activity() {
 
-    private lateinit var viewModel: RegistrationViewModel
+    private lateinit var viewModel: AuthViewModel
     private lateinit var inputNickname: EditText
     private lateinit var registerButton: Button
 
@@ -23,7 +23,7 @@ class RegistrationActivity : Activity() {
         val tokenManager = TokenManager(this)
         val whisperBackend = WhisperBackendImpl(null)
 
-        viewModel = RegistrationViewModel(tokenManager, whisperBackend)
+        viewModel = AuthViewModel(tokenManager, whisperBackend)
 
         inputNickname = findViewById(R.id.input_nickname)
         registerButton = findViewById(R.id.button_registration)

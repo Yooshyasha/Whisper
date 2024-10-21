@@ -2,8 +2,8 @@ package com.yooshyasha.whisper.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yooshyasha.whisper.data.api.TokenManager
-import com.yooshyasha.whisper.data.api.WhisperBackend
+import com.yooshyasha.whisper.data.TokenManager
+import com.yooshyasha.whisper.data.api.backend.WhisperBackend
 
 class RegistrationViewModelFactory(
     private val tokenManager: TokenManager,
@@ -11,8 +11,8 @@ class RegistrationViewModelFactory(
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RegistrationViewModel::class.java)) {
-            return RegistrationViewModel(tokenManager, whisperBackend) as T
+        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
+            return AuthViewModel(tokenManager, whisperBackend) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
