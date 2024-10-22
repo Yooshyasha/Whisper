@@ -1,20 +1,33 @@
 package com.yooshyasha.whisper.data.api.backend
 
+import android.util.Log
+import com.google.gson.Gson
+import com.yooshyasha.whisper.data.api.makeRequest
 import com.yooshyasha.whisper.data.model.ChatDTO
 import com.yooshyasha.whisper.data.model.UserDTO
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.UUID
 
-const val BACKEND_URL = "http://whisper.sytes.net:8080"
+const val BACKEND_URL = "http://localhost:8080"
 
 class WhisperBackendImpl(
-    private val token: String?
+    private var token: String?
 ) : WhisperBackend {
 
     override fun registration(nickname: String): String? {
         val endpoint = "/auth/register"
 
-        // TODO доделать
-        return null
+        val observe = makeRequest("$BACKEND_URL$endpoint")
+            .map { Gson().toJson(it) }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+
+        val request = observe.subscribe({
+
+            token = it.toString()
+
+        }, { Log.e("request", "", it) })
+
+        return token
     }
 
     override fun getChats(token: String): List<ChatDTO> {
