@@ -1,6 +1,7 @@
 package com.yooshyasha.whisper.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -10,7 +11,7 @@ import com.yooshyasha.whisper.data.TokenManager
 import com.yooshyasha.whisper.data.api.backend.WhisperBackendImpl
 import com.yooshyasha.whisper.presentation.AuthViewModel
 
-class RegistrationActivity : Activity() {
+class RegistrationActivity : Activity(), FinishMethod<String> {
 
     private lateinit var viewModel: AuthViewModel
     private lateinit var inputNickname: EditText
@@ -32,14 +33,7 @@ class RegistrationActivity : Activity() {
             val nickname = inputNickname.text.toString()
 
             if (nickname.isNotEmpty()) {
-                val token = viewModel.registerUser(nickname)
-
-                if (token != null) {
-                    Toast.makeText(this, "Registration success", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else {
-                    Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show()
-                }
+                viewModel.registerUser(nickname, this)
             } else {
                 Toast.makeText(this, "Please enter a nickname", Toast.LENGTH_SHORT).show()
             }
@@ -48,5 +42,19 @@ class RegistrationActivity : Activity() {
 
     override fun finish() {
         return
+    }
+
+    override fun finishMethod(result: String?, success: Boolean) {
+        if (result != null) {
+            Toast.makeText(this, "Registration success", Toast.LENGTH_SHORT).show()
+            finishRegistration()
+        } else {
+            Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun finishRegistration() {
+        val i = Intent(this, ChatsActivity::class.java)
+        startActivity(i)
     }
 }

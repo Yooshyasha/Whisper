@@ -2,11 +2,12 @@ package com.yooshyasha.whisper.data.api.backend
 
 import com.yooshyasha.whisper.data.model.ChatDTO
 import com.yooshyasha.whisper.data.model.UserDTO
+import com.yooshyasha.whisper.ui.FinishMethod
 import java.util.UUID
 
 interface WhisperBackend {
 
-    fun registration(nickname: String) : String? // Обращение на бэкэнд с целью регистрации. Возвращает токен
+    fun registration(nickname: String, context: FinishMethod<String>) : String? // Обращение на бэкэнд с целью регистрации. Возвращает токен
 
     fun isAuth(token: String) : Boolean // Проверяем авторизацию токена
 
