@@ -7,25 +7,31 @@ import com.yooshyasha.whisper.data.TokenManager
 import com.yooshyasha.whisper.data.api.backend.WhisperBackend
 import com.yooshyasha.whisper.data.api.backend.WhisperBackendImpl
 import com.yooshyasha.whisper.presentation.AuthViewModel
+import com.yooshyasha.whisper.presentation.UserViewModel
 import com.yooshyasha.whisper.ui.ChatsActivity
+import com.yooshyasha.whisper.ui.FinishMethod
 import com.yooshyasha.whisper.ui.RegistrationActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FinishMethod<Boolean> {
     private lateinit var registrationViewModel: AuthViewModel
     private lateinit var whisperBackend: WhisperBackend
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        registrationViewModel = AuthViewModel(TokenManager(this), null)
+        userViewModel = UserViewModel(TokenManager(this))
+        val token = userViewModel.isAuth(this)
 
-        val token = registrationViewModel.getToken()
-        whisperBackend = WhisperBackendImpl(token)
+        if ((token == null)) {
+            val i = Intent(this, RegistrationActivity::class.java)
+            startActivity(i)
+        }
+    }
 
-        registrationViewModel = AuthViewModel(TokenManager(this), whisperBackend)
-
-        if ((token == null) || !whisperBackend.isAuth(token)) {
+    override fun finishMethod(result: Boolean?, success: Boolean) {
+        if (result == false) {
             val i = Intent(this, RegistrationActivity::class.java)
             startActivity(i)
         } else {
@@ -33,5 +39,4 @@ class MainActivity : AppCompatActivity() {
             startActivity(i)
         }
     }
-
 }

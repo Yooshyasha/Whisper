@@ -3,14 +3,16 @@ package com.yooshyasha.whisper.presentation
 import androidx.lifecycle.ViewModel
 import com.yooshyasha.whisper.data.TokenManager
 import com.yooshyasha.whisper.data.api.backend.WhisperBackend
+import com.yooshyasha.whisper.data.api.backend.WhisperBackendImpl
 import com.yooshyasha.whisper.data.model.ChatDTO
 import com.yooshyasha.whisper.data.model.UserDTO
+import com.yooshyasha.whisper.ui.FinishMethod
 import java.util.UUID
 
 class UserViewModel(
     private val tokenManager: TokenManager,
-    private val whisperBackend: WhisperBackend,
 ) : ViewModel() {
+    private val whisperBackend: WhisperBackend = WhisperBackendImpl(null)
 
     fun getMe() : UserDTO? {
         return tokenManager.getToken()?.let { whisperBackend.getMe(it) }
@@ -28,7 +30,7 @@ class UserViewModel(
         tokenManager.getToken()?.let { whisperBackend.sendMessage(text, chatId, it) }
     }
 
-    fun isAuth() : Boolean? {
-        return tokenManager.getToken()?.let { whisperBackend.isAuth(it) }
+    fun isAuth(context: FinishMethod<Boolean>) : Boolean? {
+        return tokenManager.getToken()?.let { whisperBackend.isAuth(it, context) }
     }
 }

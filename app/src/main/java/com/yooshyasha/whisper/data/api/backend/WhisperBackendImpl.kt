@@ -56,10 +56,23 @@ class WhisperBackendImpl(
         TODO("Not yet implemented")
     }
 
-    override fun isAuth(token: String): Boolean {
+    override fun isAuth(token: String, context: FinishMethod<Boolean>): Boolean {
         val endpoint = "/auth/isAuth"
 
-        // TODO доделать
+        val observe = makeRequest(
+            "$BACKEND_URL$endpoint",
+            requestMethod = "POST",
+            headers = mapOf("Content-Type" to "application/json", "Authorization" to "Bearer $token"))
+            .map { Gson().fromJson(it, Boolean::class.java) }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()
+        )
+
+        val result = observe.subscribe({
+            context.finishMethod(it, success = true)
+        }, {
+            context.finishMethod(null, success = false)
+            Log.e("request", "", it)
+        })
+
         return false
     }
 

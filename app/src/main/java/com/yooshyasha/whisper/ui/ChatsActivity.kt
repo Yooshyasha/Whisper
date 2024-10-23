@@ -15,28 +15,21 @@ import com.yooshyasha.whisper.data.model.ChatDTO
 import com.yooshyasha.whisper.presentation.UserViewModel
 import java.util.zip.Inflater
 
-class ChatsActivity : Activity() {
+class ChatsActivity : Activity(), FinishMethod<Boolean> {
 
-    private lateinit var tokenManager: TokenManager
     private lateinit var userViewModel: UserViewModel
-    private lateinit var whisperBackend: WhisperBackend
 
     private lateinit var vList: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.chats_activity)
 
-        tokenManager = TokenManager(this)
-        whisperBackend = WhisperBackendImpl(null)
-        userViewModel = UserViewModel(tokenManager, whisperBackend)
+        userViewModel = UserViewModel(TokenManager(this))
 
         vList = findViewById(R.id.linear_list_items)
 
-        if (!userViewModel.isAuth()!!) {
-            val i = Intent(this, RegistrationActivity::class.java)
-        }
-
-        drawChats()
+        userViewModel.isAuth(this)
     }
 
     private fun drawChats() {
@@ -54,5 +47,14 @@ class ChatsActivity : Activity() {
         val vTitle = view.findViewById<TextView>(R.id.item_title)
         vTitle.text = chat.chatId.toString()
         vList.addView(view)
+    }
+
+    override fun finishMethod(result: Boolean?, success: Boolean) {
+        if (result == false) {
+            val i = Intent(this, RegistrationActivity::class.java)
+            startActivity(i)
+        }
+
+        drawChats()
     }
 }

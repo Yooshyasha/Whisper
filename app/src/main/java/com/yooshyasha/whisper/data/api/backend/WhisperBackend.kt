@@ -9,7 +9,7 @@ interface WhisperBackend {
 
     fun registration(nickname: String, context: FinishMethod<String>) : String? // Обращение на бэкэнд с целью регистрации. Возвращает токен
 
-    fun isAuth(token: String) : Boolean // Проверяем авторизацию токена
+    fun isAuth(token: String, context: FinishMethod<Boolean>) : Boolean // Проверяем авторизацию токена
 
     fun getMe(token: String) : UserDTO? // Получить "себя"
 
