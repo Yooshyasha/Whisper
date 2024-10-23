@@ -21,7 +21,7 @@ class ChatsActivity : Activity() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var whisperBackend: WhisperBackend
 
-    lateinit var vList: LinearLayout
+    private lateinit var vList: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class ChatsActivity : Activity() {
         whisperBackend = WhisperBackendImpl(null)
         userViewModel = UserViewModel(tokenManager, whisperBackend)
 
-        vList = findViewById<LinearLayout>(R.id.linear_list_items)
+        vList = findViewById(R.id.linear_list_items)
 
         if (!userViewModel.isAuth()!!) {
             val i = Intent(this, RegistrationActivity::class.java)
