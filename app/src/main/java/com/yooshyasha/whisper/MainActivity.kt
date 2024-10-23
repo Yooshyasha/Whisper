@@ -4,17 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.yooshyasha.whisper.data.TokenManager
-import com.yooshyasha.whisper.data.api.backend.WhisperBackend
-import com.yooshyasha.whisper.data.api.backend.WhisperBackendImpl
-import com.yooshyasha.whisper.presentation.AuthViewModel
 import com.yooshyasha.whisper.presentation.UserViewModel
 import com.yooshyasha.whisper.ui.ChatsActivity
 import com.yooshyasha.whisper.ui.FinishMethod
 import com.yooshyasha.whisper.ui.RegistrationActivity
 
 class MainActivity : AppCompatActivity(), FinishMethod<Boolean> {
-    private lateinit var registrationViewModel: AuthViewModel
-    private lateinit var whisperBackend: WhisperBackend
     private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
