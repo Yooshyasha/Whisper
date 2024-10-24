@@ -4,22 +4,25 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.view.Gravity
+import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.PopupWindow
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.yooshyasha.whisper.R
 import com.yooshyasha.whisper.data.TokenManager
-import com.yooshyasha.whisper.data.api.backend.WhisperBackend
-import com.yooshyasha.whisper.data.api.backend.WhisperBackendImpl
 import com.yooshyasha.whisper.data.model.ChatDTO
 import com.yooshyasha.whisper.presentation.UserViewModel
-import java.util.zip.Inflater
+import com.yooshyasha.whisper.ui.adapter.RecyclerAdapter
 
 class ChatsActivity : Activity(), FinishMethod<Boolean> {
 
     private lateinit var userViewModel: UserViewModel
-
-    private lateinit var vList: LinearLayout
+    private lateinit var vList: RecyclerView
+    private var chatsList = mutableListOf<ChatDTO>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,26 +30,32 @@ class ChatsActivity : Activity(), FinishMethod<Boolean> {
 
         userViewModel = UserViewModel(TokenManager(this))
 
-        vList = findViewById(R.id.linear_list_items)
-
         userViewModel.isAuth(this)
+
+        vList = findViewById(R.id.chatsList)
+
+        findViewById<Button>(R.id.sendButton).setOnClickListener { bindSendMessageButton() }
+    }
+
+    override fun finish() {
+        return
     }
 
     private fun drawChats() {
-
-        val inflater = layoutInflater
-
-        userViewModel.getChats()?.forEach { chat ->
-            drawChat(chat, inflater)
+        userViewModel.getChats()?.let {
+            chatsList = it.toMutableList()
+            showRecycler(chatsList)
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun drawChat(chat : ChatDTO, inflater: LayoutInflater) {
-        val view = inflater.inflate(R.layout.list_items, vList)
-        val vTitle = view.findViewById<TextView>(R.id.item_title)
-        vTitle.text = chat.chatId.toString()
-        vList.addView(view)
+    private fun addChat(chatDTO: ChatDTO) {
+        chatsList.add(chatDTO)
+        vList.adapter?.notifyItemInserted(chatsList.size - 1)
+    }
+
+    private fun showRecycler(chatsList: List<ChatDTO>) {
+        vList.adapter = RecyclerAdapter(chatsList)
+        vList.layoutManager = LinearLayoutManager(this)
     }
 
     override fun finishMethod(result: Boolean?, success: Boolean) {
@@ -56,5 +65,11 @@ class ChatsActivity : Activity(), FinishMethod<Boolean> {
         }
 
         drawChats()
+    }
+
+    @SuppressLint("InflateParams")
+    private fun bindSendMessageButton() {
+        val i = Intent(this, FindUserActivity::class.java)
+        startActivity(i)
     }
 }

@@ -17,9 +17,9 @@ class MainActivity : AppCompatActivity(), FinishMethod<Boolean> {
         setContentView(R.layout.main_activity)
 
         userViewModel = UserViewModel(TokenManager(this))
-        val token = userViewModel.isAuth(this)
+        val result = userViewModel.isAuth(this)
 
-        if ((token == null)) {
+        if (result == null) {
             val i = Intent(this, RegistrationActivity::class.java)
             startActivity(i)
         }
